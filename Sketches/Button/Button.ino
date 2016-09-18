@@ -1,20 +1,23 @@
-#define BUTTON 11  // Define identifier BUTTON to 11
-#define LED 13     // Define identifier LED to 13
-
-// Initialize a global integer variable `button_state` to 0
-int button_state = 0;
+// Define `PIN_BUTTON` to be the pin number on the Arduino board in which we've
+// plugged the button.
+#define PIN_BUTTON 11
+#define PIN_LED 13    // LED plugged into pin 13
 
 void setup() {
-  pinMode(LED, OUTPUT);    // Initialize LED pin as output
-  pinMode(BUTTON, INPUT);  // Initialize BUTTON pin as input
+  pinMode(PIN_LED, OUTPUT);   // Initialize LED pin as output
+  pinMode(PIN_BUTTON, INPUT); // Initialize button pin as input
 }
 
 void loop() {
-  button_state = digitalRead(BUTTON);  // Read the current state of BUTTON pin
-
-  if (button_state == HIGH) {  // If button_state is HIGH
-    digitalWrite(LED, HIGH);   // Turn on the LED
-  } else {                     // If not
-    digitalWrite(LED, LOW);    // Turn off the LED
+  // The digitalRead() button returns the state of the button, `HIGH` if it's
+  // 5 volts or `LOW` if it's 0 volts.
+  // If the pin is not connected to anything, digitalRead() will return a
+  // random value.
+  // https://www.arduino.cc/en/Reference/DigitalRead
+  int button_state = digitalRead(PIN_BUTTON); // Read the current state of the button.
+  if (button_state == HIGH) {     // If the button is pressed...
+    digitalWrite(PIN_LED, HIGH);  // turn on the LED,
+  } else {                        // otherwise...
+    digitalWrite(PIN_LED, LOW);   // turn off the LED.
   }
 }

@@ -1,23 +1,40 @@
-#define LED 13  // Define identifier LED to 13
+#define PIN_LED 13
 
-int brightness = 0; // Initialize brightness variable
-int slope = 1;      // Slope, either positive or negative
+// The current brightness of the LED.
+int brightness = 0;
+// This variable is how much we'll change the brightness, either `1` to
+// increase the brightness or `-1` to decrease the brightness.
+int slope = 1;
 
 void setup() {
-  pinMode(LED, OUTPUT); // Initialize LED pin as output
+  pinMode(PIN_LED, OUTPUT);
 }
 
 void loop() {
+  // Change the brightness, either up or down.
+  brightness += slope;
 
-  // Add the product of 1, slope to brightness
-  brightness += (1 * slope);
-
-  if (brightness > 254) {       // Brightness is at MIN
-    slope = -1;                 // Change slope to -1
-  } else if (brightness < 1) {  // Brightness is at MIN
-    slope = 1;                  // Change slope to +1
+  // If we reach maximum brightness we'll change the slope so that next time
+  // we'll dim the LED.  As we reach minimum brightness we'll change the slope
+  // so next we'll brighten the LED.
+  if (brightness >= 255) {
+    slope = -1;
+  } else if (brightness <= 0) {
+    slope = 1;
   }
 
-  analogWrite(LED, brightness); // PWM LED pin to the brightness value
-  delay(2);                     // Sleep for 2 milliseconds
+  // The `analogWrite()` function makes the pin blink on and off very fast.
+  // The ratio of time spent on to time spent off is called Pulse Width
+  // Modulation (PWM).  Only those pins with a tilde (~) on the board next to
+  // them support PWM.  The value ranges from 0 to 255 representing the ratio
+  // of on to off -- 0 is always off and 255 is always on.  Once this function
+  // returns the Arduino will blink the pin in the background, so our sketch
+  // will continue to run.
+  // https://www.arduino.cc/en/Reference/AnalogWrite
+  // Human persistance of vision is unable to see very fast blinking and will
+  // interpret the on:off ratio as brightness.
+  analogWrite(PIN_LED, brightness);
+
+  // Wait a little bit before adjusting the brightness again.
+  delay(2);
 }
